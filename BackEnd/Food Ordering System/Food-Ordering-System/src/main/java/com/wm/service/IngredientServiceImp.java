@@ -25,8 +25,8 @@ public class IngredientServiceImp implements IngredientsService{
     private RestaurantService restaurantService;
 
     @Override
-    public IngredientCategory createIngredientCategory(String nom, Long id_restau) throws Exception {
-        Restaurants restaurant = restaurantService.findRestaurantById(id_restau);
+    public IngredientCategory createIngredientCategory(String nom, String nom_restaurant) throws Exception {
+        Restaurants restaurant = restaurantService.findRestaurantByNom(nom_restaurant);
 
         IngredientCategory category = new IngredientCategory();
         category.setNom(nom);
@@ -53,9 +53,10 @@ public class IngredientServiceImp implements IngredientsService{
     }
 
     @Override
-    public ingredients createIngredient(Long id_restaurant, String nom_ingr, Long id_category) throws Exception {
-        Restaurants restaurant=restaurantService.findRestaurantById(id_restaurant);
-        IngredientCategory category=findIngredientCategoryById(id_category);
+    public ingredients createIngredient(String nom_restaurant, String nom_ingr, String nom_category) throws Exception {
+        Restaurants restaurant=restaurantService.findRestaurantByNom(nom_restaurant);
+        IngredientCategory category=ingredientCategoryRepository.findByNom(nom_category)
+                .orElseThrow(() -> new Exception("Category not found"));
 
         ingredients ingredient= new ingredients();
         ingredient.setNom(nom_ingr);
@@ -71,6 +72,11 @@ public class IngredientServiceImp implements IngredientsService{
     @Override
     public List<ingredients> findRestaurantIngredients(Long id_restaurant) {
         return ingredientRepository.findByRestaurant_Id(id_restaurant);
+    }
+
+    @Override
+    public List<ingredients> findFoodIngredients(Long id_food) {
+        return ingredientRepository.findByPlatId(id_food);
     }
 
     @Override

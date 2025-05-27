@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.model.Category;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
+import com.wm.service.AdminService;
 import com.wm.service.CategoryService;
-import com.wm.service.UtilisateurService;
 
 @RestController
-@RequestMapping("/api/admin/category")
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
@@ -26,25 +27,27 @@ public class CategoryController {
 
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private AdminService utilisateurService;
 
-    @PostMapping
+    @PostMapping("/admin/category")
     public ResponseEntity<Category> createCategory(@RequestBody Category category,
                                                   @RequestHeader("Authorization") String jwt) throws Exception{
 
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
 
-        Category createdCategory = categoryService.createCategory(category.getNom(), utilisateur.getId_utilisateur());
+        Category createdCategory = categoryService.createCategory(category.getNom(), utilisateur.getIdAdmin());
 
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
-    @GetMapping("/category/restaurant")
-    public ResponseEntity<List<Category>> getRestaurantCategory(@RequestHeader("Authorization") String jwt) throws Exception{
+    @GetMapping("/category/restaurant/{id}")
+    public ResponseEntity<List<Category>> getRestaurantCategory(
+            @PathVariable  Long id,
+            @RequestHeader("Authorization") String jwt) throws Exception{
 
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
 
-        List<Category> categories = categoryService.findCategoryByRestaurantId(utilisateur.getId_utilisateur());
+        List<Category> categories = categoryService.findCategoryByRestaurantId(id);
 
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }

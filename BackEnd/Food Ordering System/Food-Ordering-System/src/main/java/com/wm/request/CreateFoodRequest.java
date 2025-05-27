@@ -27,12 +27,17 @@ public class CreateFoodRequest {
 
     private boolean disponible;
 
-    private Long id_restaurant;
+    // private Long id_restaurant;
+
 
     private List<ingredients> ingredients;
 
     private Category categorie;
 
     private Restaurants restaurant;
+
+    private boolean vegetarian;
+
+    private boolean seasonal;
 
 }

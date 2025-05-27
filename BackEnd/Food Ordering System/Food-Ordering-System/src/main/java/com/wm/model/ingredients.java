@@ -1,5 +1,8 @@
 package com.wm.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -16,7 +19,10 @@ public class ingredients {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id_ingredient;
-
+    
+    private String nom;
+    
+    @JsonIgnore
     @ManyToOne
     private plats plat;
 
@@ -30,5 +36,8 @@ public class ingredients {
 
     private boolean enStock=true;
 
-    private String nom;
+    @ManyToMany(mappedBy = "ingredients")
+    private List<CommandeItems> commandeItems;
+
+    
 }

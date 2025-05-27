@@ -12,7 +12,7 @@ public class avis {
     private String commentaire;
 
     @ManyToOne
-    @JoinColumn(name = "id_utilisateur", nullable = false)
-    private utilisateur utilisateur;
+    @JoinColumn(name = "id_admin", nullable = false)
+    private Admin utilisateur;
 
 }

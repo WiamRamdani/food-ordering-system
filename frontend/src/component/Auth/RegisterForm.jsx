@@ -2,8 +2,8 @@ import { Button, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { Form, Field, Formik } from 'formik';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../State/Authentication/Action';
 import { useDispatch } from 'react-redux';
+import { registerUser } from '../State/Authentication/Authentication/Action';
 
 const initialValues={
   fullname:"",

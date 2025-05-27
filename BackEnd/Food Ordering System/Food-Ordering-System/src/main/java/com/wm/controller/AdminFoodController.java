@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.model.plats;
+import com.wm.model.Category;
 import com.wm.model.Restaurants;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
 import com.wm.request.CreateFoodRequest;
 import com.wm.response.MessageResponse;
+import com.wm.service.AdminServiceImp;
+import com.wm.service.CategoryService;
 import com.wm.service.FoodService;
 import com.wm.service.RestaurantService;
-import com.wm.service.UtilisateurService;
 
 @RestController
 @RequestMapping("/api/admin/food")
@@ -29,24 +31,28 @@ public class AdminFoodController {
     private FoodService foodService;
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private AdminServiceImp utilisateurService;
 
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @PostMapping
-    public ResponseEntity<plats> createFood(@RequestBody CreateFoodRequest req,
+    public ResponseEntity<plats> createFoodRequest(@RequestBody CreateFoodRequest req,
                                             @RequestHeader("Authorization") String jwt) throws Exception{
-        utilisateur utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
-        Restaurants restaurant =restaurantService.findRestaurantById(req.getId_restaurant());
-        plats plat=foodService.createPlats(req, req.getCategorie(), restaurant);
+        Admin utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
+        Restaurants restaurant =restaurantService.findRestaurantByNom(req.getRestaurant().getNom());
+        Category category = categoryService.findCategoryByNomAndRestaurnt(req.getCategorie().getNom(),restaurant.getId());
+        plats plat=foodService.createPlats(req, category, restaurant);
         return new ResponseEntity<>(plat, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteFood(@PathVariable Long id,
                                                       @RequestHeader("Authorization") String jwt) throws Exception{
-        utilisateur utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
         foodService.deleteFood(id);
 
         MessageResponse res = new MessageResponse();
@@ -57,7 +63,7 @@ public class AdminFoodController {
     @PutMapping("/{id}")
     public ResponseEntity<plats> updateFoodAvailibilityStatus(@PathVariable Long id,
                                                       @RequestHeader("Authorization") String jwt) throws Exception{
-        utilisateur utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur =utilisateurService.findUtilisateurByJwtToken(jwt);
         
         plats plat =foodService.updateAvailibilityStatus(id);
 

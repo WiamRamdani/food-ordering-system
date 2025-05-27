@@ -10,15 +10,20 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@JsonPropertyOrder({"id_menu", "commandesItems", "client", "restaurant"})
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_menu;
 
     @ManyToOne
@@ -26,11 +31,13 @@ public class Menu {
     private Restaurants restaurant;
 
     @OneToOne
-    @JoinColumn(name = "id_utilisateur")
-    private utilisateur client;
+    private Admin client;
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MenuItems> items= new ArrayList<>();
+    private List<plats> items;
 
     private double total;
+
+    @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<CommandeItems> commandeItems ;
 }

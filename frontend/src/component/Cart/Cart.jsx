@@ -6,6 +6,7 @@ import { Button, Card } from '@mui/material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import * as Yup from "yup"
 import { Formik, Field, ErrorMessage, Form } from 'formik';
+import { useSelector } from 'react-redux';
 
 
 export const style = {
@@ -36,6 +37,7 @@ const validationSchema=Yup.object({
 
 const items=[1,1]
 const Cart = () => {
+    const {cart}=useSelector(store=>store)
     const createOrderUsingSelectedAddress=()=>{}
     const handleOpenAddressModel=()=>setOpen(true)
     const [open, setOpen] = React.useState(false);
@@ -47,8 +49,8 @@ const Cart = () => {
     <>
         <main className='lg:flex justify-between'>
                 <section className='lg:w-[30%]   space-y-6 lg:min-h-screen pt-10 '>
-                    {items.map((item)=>(
-                        <CartItem/>
+                    {cart?.cart?.commandeItems?.map((item)=>(
+                        <CartItem item={item}/>
                     ))}
                     <Divider/>
                 

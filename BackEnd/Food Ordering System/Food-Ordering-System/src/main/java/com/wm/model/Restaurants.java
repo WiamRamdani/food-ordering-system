@@ -1,10 +1,15 @@
 package com.wm.model;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +19,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Restaurants {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,12 +45,14 @@ public class Restaurants {
     private Date heure_fermeture;
     private String Type_cuisine;
 
+
     @OneToOne(mappedBy = "restaurant")
     private livreur livreur;
 
     @OneToOne
+    @JoinColumn(name = "owner_id")
     private Owner owner;
-
+    
     @OneToOne
     private Adresse adresse;
 
@@ -55,17 +66,19 @@ public class Restaurants {
     @Column(length = 1000)
     private List<String> images;
 
-    @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<plats> plats=new ArrayList<>();
 
     @OneToMany
     private List<Menu> menus=new ArrayList<>();
 
 
-    @ManyToOne
-    @JoinColumn(name = "id_utilisateur", nullable = false)
-    private utilisateur utilisateur;
+    @ManyToMany(mappedBy = "preferences_restau")
+    @JsonIgnore
+    private List<Admin> adminsWhoPrefer = new ArrayList<>();
 
+    
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> categories = new ArrayList<>();
 
 }

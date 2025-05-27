@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import com.wm.model.Adresse;
 import com.wm.model.Commande;
 import com.wm.model.CommandeItems;
-import com.wm.model.MenuItems;
 import com.wm.model.Menu;
 import com.wm.model.Restaurants;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
+import com.wm.model.plats;
 import com.wm.repository.AddressRepository;
+import com.wm.repository.AdminRepository;
 import com.wm.repository.CommandeItemsRepository;
 import com.wm.repository.CommandeRepository;
-import com.wm.repository.UserRepository;
 import com.wm.request.CommandeRequest;
 
 @Service
@@ -35,7 +35,7 @@ public class CommandeServiceImp  implements CommandeService{
     private AddressRepository addressRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository userRepository;
 
     @Autowired
     private RestaurantService restaurantService;
@@ -44,7 +44,7 @@ public class CommandeServiceImp  implements CommandeService{
     private MenuService menuService;
 
     @Override
-    public Commande createCommande(CommandeRequest commande, utilisateur utilisateur) throws Exception {
+    public Commande createCommande(CommandeRequest commande, Admin utilisateur) throws Exception {
        
         Adresse adresseLivraison = commande.getAdresseLivraison();
 
@@ -64,15 +64,15 @@ public class CommandeServiceImp  implements CommandeService{
         createdCommande.setAdresse_livraison(savedAddress);
         createdCommande.setRestaurant(restaurant);
 
-        Menu menu = menuService.findMenuByUserId(utilisateur.getId_utilisateur());
+        Menu menu = menuService.findMenuByUserId(utilisateur.getIdAdmin());
 
         List<CommandeItems> cmdItems= new ArrayList<>();
 
-        for(MenuItems items : menu.getItems()){
+        for(plats items : menu.getItems()){
             CommandeItems item_cmd = new CommandeItems();
-            item_cmd.setPlats(items.getPlat());
-            item_cmd.setQuantite(items.getQuantity());
-            item_cmd.setPrixTotal(items.getPrixTotal());
+            item_cmd.setPlats(items);
+            item_cmd.setQuantite(items.getQuantite());
+            item_cmd.setPrixTotal(items.getPrix());
 
             CommandeItems savedCommandeItems = commandeItemsRepository.save(item_cmd);
             cmdItems.add(savedCommandeItems);

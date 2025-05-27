@@ -20,7 +20,7 @@ public class Commande {
 
 
     @ManyToOne
-    private utilisateur client;
+    private Admin client;
 
     @JsonIgnore
     @ManyToOne

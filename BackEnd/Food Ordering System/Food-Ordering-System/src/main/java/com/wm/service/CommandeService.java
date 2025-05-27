@@ -2,15 +2,13 @@ package com.wm.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.wm.model.Commande;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
 import com.wm.request.CommandeRequest;
 
 public interface CommandeService {
 
-    public Commande createCommande(CommandeRequest commande, utilisateur utilisateur) throws Exception;
+    public Commande createCommande(CommandeRequest commande, Admin utilisateur) throws Exception;
 
     public Commande updateCommande(Long id_commande, String Statut) throws Exception;
 

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.model.Commande;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
 import com.wm.request.CommandeRequest;
+import com.wm.service.AdminService;
 import com.wm.service.CommandeService;
-import com.wm.service.UtilisateurService;
 
 @RestController
 @RequestMapping("/api")
@@ -26,12 +26,12 @@ public class CommandeController {
     private CommandeService commandeService;
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private AdminService utilisateurService;
 
     @PostMapping("/order")
     public ResponseEntity<Commande> createCommande(@RequestBody CommandeRequest req,
                                                    @RequestHeader("Authorization" )String jwt) throws Exception{
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
         Commande commande = commandeService.createCommande(req, utilisateur);
         return new ResponseEntity<>(commande, HttpStatus.OK);
     }
@@ -39,8 +39,8 @@ public class CommandeController {
     @GetMapping("/order/user")
     public ResponseEntity<List<Commande>> getOrderHistory(@RequestHeader("Authorization" )String jwt) throws Exception{
         
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
-        List<Commande> commande = commandeService.getUserOrders(utilisateur.getId_utilisateur());
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        List<Commande> commande = commandeService.getUserOrders(utilisateur.getIdAdmin());
         return new ResponseEntity<>(commande, HttpStatus.OK);
     }
 }

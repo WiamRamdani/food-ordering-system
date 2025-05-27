@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 public class IngredientCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     private String nom;
 
@@ -30,7 +32,8 @@ public class IngredientCategory {
     @ManyToOne
     private Restaurants restaurant;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private List<ingredients> ingredients = new ArrayList<>();
 
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.model.Commande;
-import com.wm.model.utilisateur;
+import com.wm.model.Admin;
+import com.wm.service.AdminService;
 import com.wm.service.CommandeService;
-import com.wm.service.UtilisateurService;
 
 @RestController
 @RequestMapping("api/admin")
@@ -25,7 +25,7 @@ public class AdminOrderController {
     private CommandeService commandeService;
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private AdminService utilisateurService;
 
 
     @GetMapping("/order/restaurant/{id}")
@@ -34,7 +34,7 @@ public class AdminOrderController {
         @RequestParam(required = false) String statutCmd,
         @RequestHeader("Authorization" )String jwt) throws Exception{
         
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
         List<Commande> commande = commandeService.getRestaurantOrder(id, statutCmd);
         return new ResponseEntity<>(commande, HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class AdminOrderController {
         @RequestParam(required = false) String statutCmd,
         @RequestHeader("Authorization" )String jwt) throws Exception{
         
-        utilisateur utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
+        Admin utilisateur = utilisateurService.findUtilisateurByJwtToken(jwt);
         Commande commande = commandeService.updateCommande(id, statutCmd);
         return new ResponseEntity<>(commande, HttpStatus.OK);
     }

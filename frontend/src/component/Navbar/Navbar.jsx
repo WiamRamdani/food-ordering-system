@@ -6,19 +6,20 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import "./Navbar.css";
 import { Person} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { store } from "../State/Authentication/Store";
+import { store } from "../State/Store";
 import {useSelector} from 'react-redux'
 
 export const Navbar = () => {
-    const {auth} = useSelector(store=>store)
+    const {auth, cart} = useSelector(store=>store)
     const navigate=useNavigate()
     const handleAvatarClick=()=>{
-        if(auth.user?.role==="CUSTOMER"){
-            navigate("/my-profile")
-        }
-        else{
-            navigate("/admin/restaurant")
-        }
+        // if(auth.user?.role==="CUSTOMER"){
+        //     navigate("/my-profile")
+        // }
+        // else{
+        //     navigate("/admin/restaurant")
+        // }
+        navigate("/my-profile")
     }
     return (
         <Box 
@@ -27,7 +28,7 @@ export const Navbar = () => {
 
             <div className="lg:mr-10 cursor-pointer flex items-center
                 space-x-4">
-                    <li className="logo font-semibold text-gray-300 text-2xl">
+                    <li onClick={()=>navigate("/")} className="logo font-semibold text-gray-300 text-2xl">
                         WM Food
                     </li>
             </div>
@@ -40,7 +41,7 @@ export const Navbar = () => {
                 </div>
                 <div className=''>
                     {auth.user ?(
-                        <Avatar onClick={handleAvatarClick} sx={{bgcolor:"white",color:pink.A400}}>
+                        <Avatar  onClick={handleAvatarClick} sx={{bgcolor:"white",color:pink.A400}} className='cursor-pointer'>
                             {auth.user?.fullname[0].toUpperCase()}
                         </Avatar>) :(
                         <IconButton onClick={()=>navigate("/account/login")}>
@@ -50,8 +51,8 @@ export const Navbar = () => {
                 </div>
 
                 <div className=''>
-                    <IconButton >
-                        <Badge color="primary" badgeContent={2}>
+                    <IconButton onClick={()=>navigate("/cart")} >
+                        <Badge color="primary" badgeContent={cart?.cart?.commandeItems?.length || 0}>
                             <ShoppingCartIcon sx={{fontSize:"1.5rem"}}/>
                         </Badge>
                         

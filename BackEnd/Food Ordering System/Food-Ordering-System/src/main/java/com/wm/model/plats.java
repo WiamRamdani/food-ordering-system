@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 
 public class plats {
     @Id
@@ -48,11 +49,22 @@ public class plats {
     @JoinColumn(name = "id_restaurant")
     private Restaurants restaurant;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<ingredients> ingredients = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "id_menu")
     private Menu menu;
+
+    private boolean vegetarian;
+
+    private boolean seasonal;
+
+    @OneToMany(mappedBy = "plats")
+    private List<CommandeItems> commandeItems = new ArrayList<>();
+
+
+
+
 }
 

@@ -6,5 +6,5 @@ import lombok.Data;
 public class IngredientCategoryRequest {
 
     private String nom;
-    private Long id_restaurant;
+    private String nom_restaurant;
 }

@@ -7,7 +7,7 @@ public class IngredientRequest {
 
     private String nom;
 
-    private Long id_restau;
+    private String nom_restaurant;
 
-    private Long id_category;
+    private String nom_category;
 }

@@ -1,39 +1,27 @@
 package com.wm.model;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-
-public class Owner {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    private String nom;
-
-    private String prenom;
-
-    private String telephone;
-
-    private String login;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    @Email
-    private String email;
+@Data
+@NoArgsConstructor
+@DiscriminatorValue("RESTAURANT_OWNER")
+public class Owner extends Admin {
 
     @OneToOne
-    @JoinColumn(name="id_restaurant")
+    @JoinColumn(name = "id_restaurant")
     private Restaurants restaurant;
 
-    private ROLE role=ROLE.RESTAURANT_OWNER;
+    {
+        // bloc d'initialisation pour forcer le rôle
+        this.setRole(ROLE.RESTAURANT_OWNER);
+    }
 }

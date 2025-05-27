@@ -1,6 +1,8 @@
 package com.wm.request;
 
 
+import java.util.List;
+
 import com.wm.model.Restaurants;
 
 import lombok.Data;
@@ -8,14 +10,15 @@ import lombok.Data;
 @Data
 public class AddMenuItemRequest {
 
-    private Long id_menu;
 
-    private Restaurants restaurant;
+    private String nom_restaurant;
 
-    private Long id_plat;
+    private String nom_plat;
+
 
     private int quantity;
 
-    private Long prixTotal;
+
+    private List<String> ingredients;
 
 }

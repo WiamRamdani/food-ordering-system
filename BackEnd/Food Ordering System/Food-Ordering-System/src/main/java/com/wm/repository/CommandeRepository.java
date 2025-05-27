@@ -10,7 +10,7 @@ import com.wm.model.Commande;
 
 public interface CommandeRepository extends JpaRepository<Commande, Long> {
 
-    @Query("SELECT c FROM Commande c WHERE c.client.id_utilisateur = :id")
+    @Query("SELECT c FROM Commande c WHERE c.client.idAdmin = :id")
     List<Commande> findByClientId(@Param("id") Long id);
 
     public List<Commande> findByRestaurantId(Long id_restaurant);

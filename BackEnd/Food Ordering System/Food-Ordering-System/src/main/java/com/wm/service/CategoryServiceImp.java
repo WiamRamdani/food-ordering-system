@@ -26,14 +26,13 @@ public class CategoryServiceImp  implements CategoryService{
         Category category= new Category();
         category.setNom(nom);
         category.setRestaurant(restaurant);
-
         return categoryRepository.save(category);
     }
 
     @Override
     public List<Category> findCategoryByRestaurantId(Long id) throws Exception {
-        Restaurants restaurant = restaurantService.getRestaurantByUserId(id);
-        return categoryRepository.findByRestaurantId(restaurant.getId());
+        // Restaurants restaurant = restaurantService.getRestaurantByUserId(id);
+        return categoryRepository.findByRestaurantId(id);
     }
 
     @Override
@@ -44,5 +43,25 @@ public class CategoryServiceImp  implements CategoryService{
         }
         return optionalCategory.get();
     }
+
+    @Override
+    public Category findCategoryByNom(String nom) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findByNom(nom);
+        if(optionalCategory.isEmpty()){
+            throw new Exception("category not found with name: " + nom);
+        }
+        return optionalCategory.get();
+    }
+
+    @Override
+    public Category findCategoryByNomAndRestaurnt(String nom, Long id_restaurant) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findByNomAndRestaurantId(nom,id_restaurant);
+        if(optionalCategory.isEmpty()){
+            throw new Exception("category not found with name: " + nom);
+        }
+        return optionalCategory.get();
+    }
+
+
 
 }

@@ -6,3 +6,4 @@ export const isPresentInFavorites=(favorites, restaurant)=>{
     }
     return false;
 }
+export default isPresentInFavorites;

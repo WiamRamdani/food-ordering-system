@@ -16,30 +16,43 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wm.model.IngredientCategory;
 import com.wm.model.ingredients;
 import com.wm.request.IngredientCategoryRequest;
+import com.wm.request.IngredientRequest;
 import com.wm.service.IngredientsService;
 
 @RestController
-@RequestMapping("/api/admin/ingredients")
+@RequestMapping("/api")
 public class IngredientController {
 
     @Autowired
     private IngredientsService ingredientsService;
 
-    @PostMapping()
+    @PostMapping("/admin/ingredients/category")
     public ResponseEntity<IngredientCategory> createIngredientCategory(@RequestBody IngredientCategoryRequest req) throws Exception{
-        IngredientCategory category = ingredientsService.createIngredientCategory(req.getNom(), req.getId_restaurant());
+        IngredientCategory category = ingredientsService.createIngredientCategory(req.getNom(), req.getNom_restaurant());
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/stock")
+    @PostMapping("/admin/ingredients")
+    public ResponseEntity<ingredients> createIngredient(@RequestBody IngredientRequest req) throws Exception{
+        ingredients item = ingredientsService.createIngredient(req.getNom_restaurant(),req.getNom(), req.getNom_category());
+        return new ResponseEntity<>(item, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/admin/ingredients/{id}/stock")
     public ResponseEntity<ingredients> updateIngredientStock(@PathVariable Long id) throws Exception{
         ingredients item = ingredientsService.updateStock(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
-    @GetMapping("/restaurant/{id}")
+    @GetMapping("/ingredients/restaurant/{id}")
     public ResponseEntity<List<ingredients>> getRestaurantIngredients(@PathVariable Long id) throws Exception{
         List<ingredients> items = ingredientsService.findRestaurantIngredients(id);
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
+    @GetMapping("/ingredients/food/{id}")
+    public ResponseEntity<List<ingredients>> getFoodIngredients(@PathVariable Long id) throws Exception{
+        List<ingredients> items = ingredientsService.findFoodIngredients(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
